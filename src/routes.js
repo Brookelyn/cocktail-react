@@ -7,4 +7,4 @@ render((
   <Router history={browserHistory}>
     <Route path="/" component={App} />
   </Router>
-), document.body);
+), document.getElementById('root'));
