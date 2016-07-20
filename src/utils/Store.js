@@ -1,38 +1,44 @@
 import Freezer from 'freezer-js';
 
-const Store = new Freezer({});
-Store.initialize = (newState) => {
-  let currentState = Store.get();
-
-  Store.set({
-    ...currentState,
-    ...newState
-  });
-};
-let storeHistory = [];
-
-Store.on('history:undo', () => {
-  if (storeHistory.length) {
-    Store.get().reset(storeHistory[0]);
-    storeHistory.shift();
+class Store extends Freezer {
+  constructor(state) {
+    super(state);
   }
-});
 
-Store.on('history:add', () => {
-  storeHistory.push(Store.get());
-  if (storeHistory.length > 10) {
-    storeHistory.pop();
+  initialize(newState) {
+    this.historyState = [];
+    this.redoState = [];
+    let currentState = this.get();
+
+    this.set({
+      ...currentState,
+      ...newState
+    });
   }
-});
 
-Store.on('history:reset', () => {
-  if (storeHistory.length) {
-    storeHistory = [];
+  setStoreState(state) {
+    this.get().reset(state);
   }
-});
 
-Store.setStoreState = (state) => {
-  Store.get().reset(state);
-};
+  addHistoryEntry() {
+    this.historyState.unshift(this.get());
+  }
 
-export default Store;
+  undo() {
+    if (this.historyState.length) {
+      this.redoState.unshift(this.get());
+      this.get().reset(this.historyState[0]);
+      this.historyState.shift();
+    }
+  }
+
+  redo() {
+    if (this.redoState.length) {
+      this.historyState.unshift(this.get());
+      this.get().reset(this.redoState[0]);
+      this.redoState.shift();
+    }
+  }
+}
+
+export default new Store({});
