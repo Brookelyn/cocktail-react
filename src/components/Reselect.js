@@ -16,8 +16,8 @@ class Reselect extends Component {
 		Handle when results are shown in the dropdown
 	-------------------------------------------------------------*/
 	componentWillReceiveProps(props) {
-		// Update the local data state since we're being passed some new data
-		// the use case for this is if the select has some remote data that can
+		// Update the local data state since we're being passed some new data.
+		// The use case for this is if the select has some remote data that can
 		// be searched
 		let newState = {};
 		if (props.value && props.data.length && !this.state.searchFilterValue) {
@@ -43,7 +43,7 @@ class Reselect extends Component {
 	}
 
 	/*-------------------------------------------------------------
-		Get filtered data depending on the users current search
+		Get filtered data depending on the user's current search
 		Note: descriptions and search value is converted to string
 		for this search so that descriptions that are integers or
 		floats can still be searched as if they're text. This does
@@ -207,6 +207,7 @@ class Reselect extends Component {
 					value={this.state.searchFilterValue}
 					disabled={this.props.disabled}
 					autoComplete="off"
+					placeholder={this.props.placeholder}
 					onFocus={() => {
 						this.showResults();
 					}}
@@ -344,14 +345,19 @@ Reselect.propTypes = {
 		A callback when the user selects an option from the results
 		list. Should usually update the value prop full-cycle.
 	-------------------------------------------------------------*/
-	onChange: React.PropTypes.func
+	onChange: React.PropTypes.func,
+
+	/*-------------------------------------------------------------
+		If the Reselect input field requires a placeholder. The
+		default is for this to be blank.
+	-------------------------------------------------------------*/
+	placeholder: React.PropTypes.string
 };
 
 Reselect.defaultProps = {
 	data: [],
-	onNoResults: () => {
-
-	}
+	onNoResults: () => {},
+	placeholder: ''
 };
 
 export default Reselect;
