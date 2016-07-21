@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   entry: [
@@ -29,7 +30,8 @@ module.exports = {
   devtool: 'eval-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new WebpackNotifierPlugin({title: 'Commusoft front-end'}),
   ],
   module: {
     loaders: [
