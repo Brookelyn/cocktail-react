@@ -33,7 +33,9 @@ class Reselect extends Component {
 			} else {
 				console.warn('The selected value passed to Reselect doesn\'t exist in it\'s the current data array, calling onNoResults');
 				newState.searchFilterValue = this.props.value.toString();
-				props.onNoResults(newState.searchFilterValue);
+				if (props.onNoResults) {
+					props.onNoResults(newState.searchFilterValue);
+				}
 			}
 		}
 		newState.filteredData = this.getFilteredData(props.data, newState.searchFilterValue);
@@ -79,7 +81,7 @@ class Reselect extends Component {
 		// downloading data and there's no results in the current dataset
 		// then handle on no results callback. Use cases include fetching
 		// new results based on the user's search
-		if (this.props.loading === false && filteredData.length === 0) {
+		if (this.props.loading === false && filteredData.length === 0 && this.props.onNoResults) {
 			this.props.onNoResults(searchFilterValue);
 		}
 	}
@@ -346,7 +348,10 @@ Reselect.propTypes = {
 };
 
 Reselect.defaultProps = {
-	data: []
+	data: [],
+	onNoResults: () => {
+
+	}
 };
 
 export default Reselect;
